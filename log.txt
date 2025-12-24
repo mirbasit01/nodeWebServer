@@ -1,22 +1,11 @@
-1766493608204: / New Request Received
-1766493642548: / New Request Received
-1766493656046: /about New Request Received
-1766493658256: /about New Request Received
-1766493660740: /.well-known/appspecific/com.chrome.devtools.json New Request Received
-1766493670917: / New Request Received
-1766493691086: / New Request Received
-1766493692010: / New Request Received
-1766493692171: / New Request Received
-1766493692382: / New Request Received
-1766494079394: /about?basit=newbasitt New Request Received
-1766494088286: /about?basit=newbasitt New Request Received
-1766494089920: /about?basit=newbasitt New Request Received
-1766494112086: /about?basit=newbasitt New Request Received
-1766494269679: /about?basit=newbasitt New Request Received
-1766494270897: /about?basit=newbasitt New Request Received
-1766494338667: /about?basit=newbasitt New Request Received
-1766494531333: /about?basit=newbasit&userId=1&search=dog New Request Received
-1766494533472: /about?basit=newbasit&userId=1&search=dog New Request Received
-1766494571012: /about?basit=newbasit&userId=1&search=dog New Request Received
-1766494744282: / New Request Received
-1766494803345: /search?search_query=hello+iam+abdul+basit New Request Received
+REST API - json
+
+GET / USER - LIST ALL USERS
+GET / USER/1    GET the user whit ID 1
+GET / USER/2   GET the user whit ID 2
+
+POST / User - create new user 
+Patch / user/1 - edit the user whit ID 1 
+
+DELET /user/1 - delete the user whit ID 1 
+

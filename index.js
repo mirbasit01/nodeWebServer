@@ -1,32 +1,69 @@
-const http = require('http');
+const express = require('express');
+const user = require('./MOCK_DATA.json');
+const app = express();
+const port = 3000;
 const fs = require('fs');
-const url = require('url');
+
+// middleware
+app.use(express.urlencoded({ extended: false }));
 
 
-const myserver = http.createServer((req, res) => {
-    if(req.url === '/favicon.ico') return; res.end();
-    const log = `${Date.now()}: ${req.url} New Request Received\n`;
-    const myurl = url.parse(req.url, true);
-    console.log(myurl)
-    fs.appendFile('log.txt', log, (err, data) => {
-        switch(myurl.pathname){
-            case '/': res.end('Home Page');
-            break;
-            case '/about': 
-            const username = myurl.query.myname;
-            console.log(username);
-            res.end(`About Page. Hello, ${username}`);
-            break;
-            case '/search':
-                const search = myurl.query.search_query;
-                res.end(`You searched for: ${search}`);
-            default: res.end('404 Page Not Found');
-            break;
-        }
-        
-    });
+
+app.get('/users', (req, res) => {
+    const html = `
+    <ul>
+        ${user.map((user) => `<li>${user.first_name}</li>`).join('')}
+    </ul>
+    `;
+    res.send(html);
 });
-myserver.listen(8000, () => {
-    console.log('Server is listening on port 8000');
-})
 
+app.get('/api/users', (req, res) => {
+    res.json(user);
+});
+
+app.route('/api/users/:id').get((req, res) => {
+    const id = Number(req.params.id);
+    const user1 = user.find((user) => user.id === id);
+    res.json(user1);
+})
+    .patch((req, res) => {
+        // edit user
+        const id = Number(req.params.id);
+        const body = req.body;
+        const userIndex = user.findIndex((user) => user.id === id);
+        user[userIndex] = { ...user[userIndex], ...body };
+        fs.writeFile('./MOCK_DATA.json', JSON.stringify(user), (err, response) => {
+            return res.json({ status: 'User Updated' })
+        })
+    })
+    .delete((req, res) => {
+        // delete user
+        const id = Number(req.params.id);
+        const userIndex = user.findIndex((user) => user.id === id);
+        user.splice(userIndex, 1);
+        fs.writeFile('./MOCK_DATA.json', JSON.stringify(user), (err, response) => {
+            return res.json({ status: 'User Deleted' })
+        })
+    });
+
+
+app.post('/api/users', express.json(), (req, res) => {
+    //TOOD : Create new user
+    const body = req.body;
+    console.log(body, 'body')
+    user.push({...body , id: user.length + 1})
+    fs.writeFile('./MOCK_DATA.json', JSON.stringify(user), (err, response) => {
+        return res.json({ status: 'User Created', id: user.length  })
+    })
+});
+
+
+
+
+
+
+
+
+
+app.listen(port, () => { console.log(`Server is running on port ${port}`) });
