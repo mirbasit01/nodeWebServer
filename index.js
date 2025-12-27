@@ -52,9 +52,9 @@ app.post('/api/users', express.json(), (req, res) => {
     //TOOD : Create new user
     const body = req.body;
     console.log(body, 'body')
-    user.push({...body , id: user.length + 1})
+    user.push({ ...body, id: user.length + 1 })
     fs.writeFile('./MOCK_DATA.json', JSON.stringify(user), (err, response) => {
-        return res.json({ status: 'User Created', id: user.length  })
+        return res.json({ status: 'User Created', id: user.length })
     })
 });
 
