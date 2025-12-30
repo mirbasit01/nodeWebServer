@@ -8,6 +8,20 @@ const fs = require('fs');
 app.use(express.urlencoded({ extended: false }));
 
 
+app.use((req, res, next) => {
+    fs.appendFile(
+        "access.log",
+        `${new Date().toISOString()} - ${req.ip} ${req.method} - ${req.url}\n`,
+        (err , data)=> {
+            next();
+        }
+    )
+})
+
+ 
+    
+
+
 
 app.get('/users', (req, res) => {
     const html = `
@@ -19,6 +33,7 @@ app.get('/users', (req, res) => {
 });
 
 app.get('/api/users', (req, res) => {
+    res.setHeader('X-Developer-By', 'mirbasit01')
     res.json(user);
 });
 
@@ -51,10 +66,14 @@ app.route('/api/users/:id').get((req, res) => {
 app.post('/api/users', express.json(), (req, res) => {
     //TOOD : Create new user
     const body = req.body;
+    if(!body || !body.first_name || !body.last_name || !body.email ||  !body.gender){
+        return res.status(400).json({ msg: 'Missing required fields' });
+        
+    }
     console.log(body, 'body')
     user.push({ ...body, id: user.length + 1 })
     fs.writeFile('./MOCK_DATA.json', JSON.stringify(user), (err, response) => {
-        return res.json({ status: 'User Created', id: user.length })
+        return res.status(201).json({ status: 'User Created', id: user.length })
     })
 });
 

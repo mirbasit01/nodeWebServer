@@ -1,0 +1,28 @@
+2025-12-30T12:34:29.538Z - GET - /api/users
+2025-12-30T12:36:22.453Z - GET - /api/users/1002
+2025-12-30T12:36:42.914Z - GET - /api/users/1000
+2025-12-30T12:38:25.727Z - POST - /api/users?first_name=abdul&last_name=basit01&email=heyiamabdit@gmail.com&gender=male
+2025-12-30T12:38:38.153Z - POST - /api/users?first_name=newbasit&last_name=basit01&email=heyiamabdit@gmail.com&gender=male
+2025-12-30T12:38:44.518Z - GET - /api/users/1003
+2025-12-30T12:38:54.932Z - GET - /api/users/1003
+2025-12-30T12:39:46.401Z - POST - /api/users?first_name=newbasit&last_name=basit01&email=heyiamabdit@gmail.com&gender=male
+2025-12-30T12:40:36.620Z - POST - /api/users?first_name=newbasit&last_name=basit01&email=heyiamabdit@gmail.com&gender=male
+2025-12-30T12:40:43.872Z - GET - /api/users/1005
+2025-12-30T12:41:15.017Z - DELETE - /api/users/1003
+2025-12-30T12:41:20.917Z - DELETE - /api/users/1002
+2025-12-30T12:41:24.785Z - DELETE - /api/users/1004
+2025-12-30T12:42:01.918Z - POST - /api/users?first_name=newbasit&last_name=basit01&email=heyiamabdit@gmail.com&gender=male
+2025-12-30T12:43:11.318Z - POST - /api/users?first_name=newbasit&last_name=basit01&email=heyiamabdit@gmail.com&gender=male
+2025-12-30T12:54:56.840Z - ::1 GET - /api/users/1005
+2025-12-30T12:55:12.339Z - ::1 GET - /api/users
+2025-12-30T12:55:23.703Z - ::1 GET - /api/users
+2025-12-30T13:10:38.791Z - ::1 GET - /api/users
+2025-12-30T13:18:00.244Z - ::1 GET - /api/users
+2025-12-30T13:26:56.459Z - ::1 GET - /api/user
+2025-12-30T13:27:00.693Z - ::1 GET - /api/users
+2025-12-30T13:29:28.115Z - ::1 GET - /api/users
+2025-12-30T13:30:41.062Z - ::1 GET - /api/users
+2025-12-30T13:31:50.358Z - ::1 POST - /api/users?first_name=newbasit&last_name=basit01&email=heyiamabdit@gmail.com&gender=male
+2025-12-30T13:35:21.558Z - ::1 POST - /api/users?first_name=newbasit&last_name=basit01&email=heyiamabdit@gmail.com&gender=male
+2025-12-30T13:36:38.693Z - ::1 POST - /api/users?first_name=newbasit&last_name=basit01&email=heyiamabdit@gmail.com&gender=male
+2025-12-30T13:37:58.594Z - ::1 POST - /api/users?first_name=newbasit&last_name=basit01&email=heyiamabdit@gmail.com&gender=male
