@@ -1,80 +1,114 @@
 const express = require('express');
-const user = require('./MOCK_DATA.json');
 const app = express();
 const port = 3000;
 const fs = require('fs');
+const mongoose = require('mongoose');
+const { type } = require('os');
+
+
+//connect to mongodb
+mongoose.connect('mongodb://127.0.0.1:27017/nodeWebServer')
+    .then(() => console.log('MongoDB Connected'))
+    .catch((err) => console.log('Mongo Error', err)
+    );
+
+//schema
+const userSchema = new mongoose.Schema({
+    firstName: {
+        type: String,
+        required: true
+    },
+    lastName: {
+        type: String,
+    },
+    email: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    jobTitle: {
+        type: String,
+    },
+    gender: {
+        type: String,
+    }
+
+}
+    , { timestamps: true }
+)
+
+//model
+const User = mongoose.model('User', userSchema);
+
+
 
 // middleware
 app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
 
 app.use((req, res, next) => {
     fs.appendFile(
         "access.log",
         `${new Date().toISOString()} - ${req.ip} ${req.method} - ${req.url}\n`,
-        (err , data)=> {
+        (err, data) => {
             next();
         }
     )
 })
 
- 
-    
-
-
-
-app.get('/users', (req, res) => {
+app.get('/users', async (req, res) => {
+    const dbuser = await User.find({});
     const html = `
     <ul>
-        ${user.map((user) => `<li>${user.first_name}</li>`).join('')}
+        ${dbuser.map((user) => `<li>${user.firstName} - ${user.email}</li>`).join('')}
     </ul>
     `;
     res.send(html);
 });
 
-app.get('/api/users', (req, res) => {
+app.get('/api/users', async (req, res) => {
+    const dbuser = await User.find({});
     res.setHeader('X-Developer-By', 'mirbasit01')
-    res.json(user);
+    res.json(dbuser);
 });
 
-app.route('/api/users/:id').get((req, res) => {
-    const id = Number(req.params.id);
-    const user1 = user.find((user) => user.id === id);
-    res.json(user1);
+app.route('/api/users/:id').get(async (req, res) => {
+    const id = req.params.id;
+    const dbuser = await User.findById(id);
+    res.json(dbuser);
 })
-    .patch((req, res) => {
+    .patch(async (req, res) => {
         // edit user
-        const id = Number(req.params.id);
-        const body = req.body;
-        const userIndex = user.findIndex((user) => user.id === id);
-        user[userIndex] = { ...user[userIndex], ...body };
-        fs.writeFile('./MOCK_DATA.json', JSON.stringify(user), (err, response) => {
-            return res.json({ status: 'User Updated' })
-        })
+        await User.findByIdAndUpdate(req.params.id, req.body);
+        const updatedUser = await User.findById(req.params.id);
+        res.json({ status: 'User Updated', user: updatedUser })
     })
-    .delete((req, res) => {
+    .delete(async (req, res) => {
         // delete user
-        const id = Number(req.params.id);
-        const userIndex = user.findIndex((user) => user.id === id);
-        user.splice(userIndex, 1);
-        fs.writeFile('./MOCK_DATA.json', JSON.stringify(user), (err, response) => {
-            return res.json({ status: 'User Deleted' })
-        })
+        await User.findByIdAndDelete(req.params.id);
+        res.json({ status: 'User Deleted' })
     });
 
 
-app.post('/api/users', express.json(), (req, res) => {
+app.post('/api/users', async (req, res) => {
     //TOOD : Create new user
     const body = req.body;
-    if(!body || !body.first_name || !body.last_name || !body.email ||  !body.gender){
+    if (!body || !body.first_name || !body.last_name || !body.email || !body.gender || !body.job_title) {
         return res.status(400).json({ msg: 'Missing required fields' });
-        
+
     }
     console.log(body, 'body')
-    user.push({ ...body, id: user.length + 1 })
-    fs.writeFile('./MOCK_DATA.json', JSON.stringify(user), (err, response) => {
-        return res.status(201).json({ status: 'User Created', id: user.length })
+    const result = await User.create({
+        firstName: body.first_name,
+        lastName: body.last_name,
+        email: body.email,
+        gender: body.gender,
+        jobTitle: body.job_title,
     })
+    console.log(result, ' user : ')
+    return res.status(201).json({ msg: 'User Created', user: result })
+
 });
 
 
